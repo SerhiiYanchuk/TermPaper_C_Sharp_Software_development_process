@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="HotelApp.Controllers.ClientsController">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEIIAAAACAQAAAAAAAAAAAAAAABgQBAAAA=</HashCode>
+      <FileName>Controllers\ClientsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Controllers.HotelsController">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAIAAAAAAAAAAAAAAFEAAAAAAAIABAAgAA=</HashCode>
+      <FileName>Controllers\HotelsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Controllers.OrdersController">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACTAAAAAIAAAAAAAAAAAAAAAAAAIAAEAAAAAAAAA=</HashCode>
+      <FileName>Controllers\OrdersController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Controllers.RoomsController">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAoAAIAAAAAIAAABAAAAAAABAAAIAAAAgA=</HashCode>
+      <FileName>Controllers\RoomsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.ActiveOrderModel">
+    <Position X="12.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgBAAgAAAAAAAIAAAAAoAAAAAAAAAAEA=</HashCode>
+      <FileName>Models\Entity_Model\ActiveOrderModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.ClientModel">
+    <Position X="10.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAgAAgAAAQAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Models\Entity_Model\ClientModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.HotelModel">
+    <Position X="7" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAQAAAAAAAACAAQAAAAAAAA=</HashCode>
+      <FileName>Models\Entity_Model\HotelModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.HotelRoomModel">
+    <Position X="8.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAECAAAAAgAAAAEAAAAAAAAAAEAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Models\Entity_Model\HotelRoomModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.ClientFilterModel">
+    <Position X="10.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\ClientFilter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.FreeHotelRoomModel">
+    <Position X="8.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAEA=</HashCode>
+      <FileName>Models\FreeHotelRoomModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.HotelRoomSeachFilterModel">
+    <Position X="7" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAEAIAAAQAAAAAAEA=</HashCode>
+      <FileName>Models\HotelRoomSeachFilterModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.InfoHotelModel">
+    <Position X="12.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAEAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\InfoHotel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.Models.OrderFilterModel">
+    <Position X="8.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAACAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\OrderFilterModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="HotelApp.Models.PaymentStateEnumModel" Collapsed="true">
+    <Position X="4.75" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAACAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Models\Entity_Model\ActiveOrderModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HotelApp.Models.TypeSizeEnumModel" Collapsed="true">
+    <Position X="9.25" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAQAAAAAAAAAAAAAAAABAAgIAAAAAAAAAADA=</HashCode>
+      <FileName>Models\Entity_Model\EnumsModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HotelApp.Models.TypeComfortEnumModel" Collapsed="true">
+    <Position X="7" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAQAgAAAAAAAAAAgAAAAAAAAAAAgAAAAAiA=</HashCode>
+      <FileName>Models\Entity_Model\EnumsModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HotelApp.Models.SortClientEnumModel" Collapsed="true">
+    <Position X="11" Y="16.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkAAAAAAAAAAAAAAAAAABAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\SortClientEnumModel.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

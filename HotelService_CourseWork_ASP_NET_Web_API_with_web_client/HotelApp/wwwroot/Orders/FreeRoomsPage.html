@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet" href="../css/table.css" />
+</head>
+<body>
+    <header>
+        <a href="../ManagePage.html" class="logo"></a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Rooms</a>
+                    <ul class="submenu">
+                        <li><a href="../Rooms/ShowRoomsPage.html">List of rooms</a></li>
+                        <li><a href="../Rooms/AddRoom.html">Add room</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Orders</a>
+                    <ul class="submenu">
+                        <li><a href="./SearchFreeRooms.html">Make order</a></li>
+                        <li><a href="./SearchClientOrders.html">View orders for the period</a></li>
+                        <li><a href="./BookedOrders.html">View booked order</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+
+
+    <table class="table_dark">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>PricePerDay</th>
+                <th>TypeComfort</th>
+                <th>TypeSize</th>
+                <th>CheckInDate</th>
+                <th>MaxCheckOutDate</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+    <script>
+
+        function row(room) {
+
+            const tr = document.createElement("tr");
+            //tr.setAttribute("data-rowid", user.id);
+
+
+            const numberTd = document.createElement("td");
+            numberTd.append(room.number);
+            tr.append(numberTd);
+
+            const priceTd = document.createElement("td");
+            priceTd.append(room.pricePerDay);
+            tr.append(priceTd);
+
+            const comfortTd = document.createElement("td");
+            switch (room.typeComfort) {
+                case 1:
+                    comfortTd.append("Standart");
+                    break;
+                case 2:
+                    comfortTd.append("Suite");
+                    break;
+                case 3:
+                    comfortTd.append("De_Luxe");
+                    break;
+                case 4:
+                    comfortTd.append("Duplex");
+                    break;
+                case 5:
+                    comfortTd.append("Family_Room");
+                    break;
+                case 6:
+                    comfortTd.append("Honeymoon_Room");
+                    break;
+            }
+            tr.append(comfortTd);
+
+            const sizeTd = document.createElement("td");
+            switch (room.typeSize) {
+                case 1:
+                    sizeTd.append("SGL");
+                    break;
+                case 2:
+                    sizeTd.append("DBL");
+                    break;
+                case 3:
+                    sizeTd.append("DBL_TWN");
+                    break;
+                case 4:
+                    sizeTd.append("TRPL");
+                    break;
+                case 5:
+                    sizeTd.append("DBL_EXB");
+                    break;
+                case 6:
+                    sizeTd.append("TRPL_EXB");
+                    break;
+            }
+            tr.append(sizeTd);
+
+            const checkInDateTd = document.createElement("td");
+
+            let date = new Date(room.checkInDate);
+            checkInDateTd.append(date.getDate() + "." + (date.getMonth()+1) + "." + date.getFullYear());
+            tr.append(checkInDateTd);
+
+            const maxCheckOutDateTd = document.createElement("td");
+            if (room.maxCheckOutDate) {
+                date = new Date(room.maxCheckOutDate);
+                maxCheckOutDateTd.append(date.getDate() + "." + (date.getMonth()+1) + "." + date.getFullYear());
+            }  
+            else 
+                maxCheckOutDateTd.append("not occupied");
+                
+            tr.append(maxCheckOutDateTd);
+
+            const linksTd = document.createElement("td");
+
+            const rentLink = document.createElement("a");
+            //editLink.setAttribute("data-id", user.id);
+            rentLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            rentLink.append("Rent");
+            rentLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                let orderDetail = {
+                    hotelRoomId: room.hotelRoomId,
+                    checkInDate: room.checkInDate,
+                    maxCheckOutDate: room.maxCheckOutDate
+                }
+                localStorage.setItem('orderDetail', JSON.stringify(orderDetail));
+                window.location.href = './MakeOrder.html';
+            });
+            linksTd.append(rentLink);
+
+            tr.appendChild(linksTd);
+
+            return tr;
+        }
+
+        let title = document.querySelector("a");
+        title.innerHTML = localStorage['hotelName'];
+
+        let myData = JSON.parse(localStorage['freeRooms']);
+        let rows = document.querySelector("tbody");
+        localStorage.removeItem('freeRooms'); // Clear the localStorage
+
+        myData.forEach(room => {
+            rows.append(row(room));
+        });
+
+
+    </script>
+</body>
+</html>

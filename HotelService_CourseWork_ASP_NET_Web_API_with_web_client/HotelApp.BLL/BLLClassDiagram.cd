@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="HotelApp.BLL.DTO.ActiveOrderDTO" Collapsed="true">
+    <Position X="5.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgBAAgAAAAAAAIAAAAAoAAAAAAAAAAEA=</HashCode>
+      <FileName>DTO\Entity_DTO\ActiveOrderDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.ClientDTO" Collapsed="true">
+    <Position X="4" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAgAAgAAAQAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>DTO\Entity_DTO\ClientDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.HotelDTO" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAQAAAAAAAACAAQAAAAAAAA=</HashCode>
+      <FileName>DTO\Entity_DTO\HotelDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.HotelRoomDTO" Collapsed="true">
+    <Position X="2.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAECAAAAAgAAAAEAAAAAAAAAAEAAAAAQAAAAAAAA=</HashCode>
+      <FileName>DTO\Entity_DTO\HotelRoomDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.ClientFilterDTO">
+    <Position X="5.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\ClientFilterDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.FreeHotelRoomDTO">
+    <Position X="2.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAEA=</HashCode>
+      <FileName>DTO\FreeHotelRoomDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.HotelRoomSeachFilterDTO">
+    <Position X="7.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAEAIAAAQAAAAAAEA=</HashCode>
+      <FileName>DTO\HotelRoomSeachFilterDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.InfoHotelDTO">
+    <Position X="9.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAEAAAAAIAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\InfoHotelDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.OrderFilterDTO">
+    <Position X="4" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAACAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\OrderFilterDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.DTO.PageDTO&lt;T&gt;">
+    <Position X="11" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\PageDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.Infrastructure.HotelServiceMapperProfile">
+    <Position X="18.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Infrastructure\HotelServiceMapperProfile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HotelApp.BLL.Services.ActiveOrderAdminService" BaseTypeListCollapsed="true">
+    <Position X="8" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAEAACAAAAAACBAAAAAAAAAAgAAAAkAAAAAABAA=</HashCode>
+      <FileName>Services\ActiveOrderAdminService .cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="HotelApp.BLL.Services.ClientAdminService" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAQDAAAAQACAAAAAAAAAAAggAAABABAAAAAAQ=</HashCode>
+      <FileName>Services\ClientAdminService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="HotelApp.BLL.Services.HotelAdminService" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACFAAAAACAAAAAAAAAhAgAAAAAAIABAAAAA=</HashCode>
+      <FileName>Services\HotelAdminService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="HotelApp.BLL.Services.HotelRoomsAdminService" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QJAAAAAAACAAAAAAGAAAAAAAABAAgAAAAAAEAAAAAEI=</HashCode>
+      <FileName>Services\HotelRoomsAdminService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="HotelApp.BLL.Interfaces.IActiveOrderAdminService">
+    <Position X="13.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAEAAAAAAAAAABAAAAAAAAAAAAAAAkAAAAAABAA=</HashCode>
+      <FileName>Interfaces\IActiveOrderAdminService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="HotelApp.BLL.Interfaces.IClientAdminService">
+    <Position X="11.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAQBAAAAQAAAAAAAAAAAAAAgAAABABAAAAAAQ=</HashCode>
+      <FileName>Interfaces\IClientAdminService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="HotelApp.BLL.Interfaces.IHotelAdminService">
+    <Position X="8" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAFAAAAAAAAAAAAAAAhAAAAAAAAIABAAAAA=</HashCode>
+      <FileName>Interfaces\IHotelAdminService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="HotelApp.BLL.Interfaces.IHotelRoomsAdminService">
+    <Position X="9.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QBAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAEAAAAAEI=</HashCode>
+      <FileName>Interfaces\IHotelRoomsAdminService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="HotelApp.BLL.DTO.PaymentStateEnumDTO" Collapsed="true">
+    <Position X="5.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAACA=</HashCode>
+      <FileName>DTO\Entity_DTO\ActiveOrderDTO.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HotelApp.BLL.DTO.TypeSizeEnumDTO" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAQAAAAAAAAAAAAAAAABAAgIAAAAAAAAAADA=</HashCode>
+      <FileName>DTO\Entity_DTO\EnumsDTO.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HotelApp.BLL.DTO.TypeComfortEnumDTO" Collapsed="true">
+    <Position X="0.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAQAgAAAAAAAAAAgAAAAAAAAAAAgAAAAAiA=</HashCode>
+      <FileName>DTO\Entity_DTO\EnumsDTO.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="HotelApp.BLL.DTO.SortClientEnumDTO" Collapsed="true">
+    <Position X="11.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkAAAAAAAAAAAAAAAAAABAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DTO\SortClientEnumDTO.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

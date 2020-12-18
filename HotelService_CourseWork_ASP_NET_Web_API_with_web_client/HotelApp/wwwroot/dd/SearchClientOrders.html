@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet" href="../css/fields.css" media="screen" type="text/css" />
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo">Hotel Service</a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Rooms</a>
+                    <ul class="submenu">
+                        <li><a href="../Rooms/ShowRoomsPage.html">List of rooms</a></li>
+                        <li><a href="../Rooms/AddRoom.html">Add room</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Clients</a>
+                    <ul class="submenu">
+                        <li><a href="./SearchFreeRooms.html">Make order</a></li>
+                        <li><a href="./SearchClientOrders.html">Look orders</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="login-form">
+        <h1>Client Info</h1>
+        <fieldset>
+            <form name="clientForm">
+                <input type="text" name="phoneNumber" required placeholder="phoneNumber" pattern="^[0-9]+$">
+                <input type="submit" value="Search">
+            </form>
+        </fieldset>
+    </div>
+
+    <script>
+        async function SearchClientOrders(phoneNumber) {
+
+            const response = await fetch("https://localhost:44364/api/clients/orders?phoneNumber=" + phoneNumber, {
+                method: "GET",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" }
+            });
+            if (response.ok === true) {
+                const body = await response.json();
+                localStorage.setItem('orders', JSON.stringify(body));
+                window.location.href = "./ClientOrdersPage.html"
+            }
+            
+        }
+
+        document.forms["clientForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["clientForm"];
+            const phoneNumber = form.elements["phoneNumber"].value;
+            SearchClientOrders(phoneNumber);
+        });
+    </script>
+
+</body>
+</html>

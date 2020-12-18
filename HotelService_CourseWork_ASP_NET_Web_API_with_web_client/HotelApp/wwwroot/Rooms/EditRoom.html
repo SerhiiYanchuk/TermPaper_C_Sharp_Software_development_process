@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet" href="../css/fields.css" media="screen" type="text/css" />
+</head>
+<body>
+    <header>
+        <a href="../ManagePage.html" class="logo"></a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Rooms</a>
+                    <ul class="submenu">
+                        <li><a href="./ShowRoomsPage">List of rooms</a></li>
+                        <li><a href="./AddRoom">Add room</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Clients</a>
+                    <ul class="submenu">
+                        <li><a href="../Clients/SearchFreeRooms">Make order</a></li>
+                        <li><a href="../Clients/SearchClientOrders">Look orders</a></li>
+                        <li><a href="../Clients/BookedOrders.html">View booked order</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="errors" class="myDiv" style="display:none; color: darkred"></div>
+
+    <div id="login-form">
+        <h1>Edit room</h1>
+        <fieldset>
+            <form name="roomForm">
+                <input type="hidden" name="HotelId">
+                <input type="hidden" name="HotelRoomId">
+                <input type="text" name="Number" required placeholder="Number" pattern="^[a-zA-Z0-9]+$">
+                <input type="text" name="PricePerDay" required placeholder="PricePerDay" pattern="^[0-9]*[.]?[0-9]+$">
+                <select data-val="true" data-val-required="The TypeComfort field is required." id="TypeComfort" name="TypeComfort">
+                    <option value="1">Standart</option>
+                    <option value="2">Suite</option>
+                    <option value="3">De_Luxe</option>
+                    <option value="4">Duplex</option>
+                    <option value="5">Family_Room</option>
+                    <option value="6">Honeymoon_Room</option>
+                </select>
+                <select data-val="true" data-val-required="The TypeSize field is required." id="TypeSize" name="TypeSize">
+                    <option value="1">SGL</option>
+                    <option value="2">DBL</option>
+                    <option value="3">DBL_TWN</option>
+                    <option value="4">TRPL</option>
+                    <option value="5">DBL_EXB</option>
+                    <option value="6">TRPL_EXB</option>
+                </select>
+                <input type="submit" value="Save">
+            </form>
+        </fieldset>
+    </div>
+
+    <script>
+        async function GetRoom(hotelRoomId, hotelId) {
+            const response = await fetch("https://localhost:44364/api/rooms/" + hotelRoomId, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+
+            if (response.ok === true) {
+                const body = await response.json();
+
+                const form = document.forms["roomForm"];
+                form.elements["HotelId"].value = hotelId;
+                form.elements["HotelRoomId"].value = body.hotelRoomId;
+                form.elements["Number"].value = body.number;
+                form.elements["PricePerDay"].value = body.pricePerDay;
+                form.elements["TypeComfort"].value = body.typeComfort;
+                form.elements["TypeSize"].value = body.typeSize;
+            }
+        }
+
+        async function EditRoom(hotelId, hotelRoomId, number, pricePerDay, typeComfort, typeSize) {
+            const response = await fetch("https://localhost:44364/api/rooms", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    HotelId: parseInt(hotelId),
+                    HotelRoomId: parseInt(hotelRoomId),
+                    Number: number,
+                    PricePerDay: parseFloat(pricePerDay),
+                    TypeComfort: parseInt(typeComfort),
+                    TypeSize: parseInt(typeSize)
+                })
+            });
+            if (response.status == 500) {
+                window.location.href = "../error.html";
+            }
+            if (response.status == 400) {
+                const body = await response.json();
+                const errorBlock = document.getElementById("errors")
+
+                errorBlock.innerHTML = "";
+                if (body.errors) {
+                    if (body.errors.Number) {
+                        body.errors.Number.forEach(error => {
+                            const p = document.createElement("p");
+                            p.append(error);
+                            errorBlock.append(p);
+                        });
+                    }
+                    if (body.errors.PricePerDay) {
+                        body.errors.PricePerDay.forEach(error => {
+                            const p = document.createElement("p");
+                            p.append(error);
+                            errorBlock.append(p);
+                        });
+                    }
+                    if (body.errors.TypeSize) {
+                        body.errors.TypeSize.forEach(error => {
+                            const p = document.createElement("p");
+                            p.append(error);
+                            errorBlock.append(p);
+                        });
+                    }
+                    if (body.errors.TypeComfort) {
+                        body.errors.TypeComfort.forEach(error => {
+                            const p = document.createElement("p");
+                            p.append(error);
+                            errorBlock.append(p);
+                        });
+                    }
+                }
+
+                errorBlock.style.display = "block";
+            }
+            if (response.ok === true) {
+                window.location.href = "../ManagePage.html"
+            }
+        }
+
+        document.forms["roomForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["roomForm"];
+            const hotelId = form.elements["HotelId"].value;
+            const hotelRoomId = form.elements["HotelRoomId"].value;
+            const number = form.elements["Number"].value;
+            const pricePerDay = form.elements["PricePerDay"].value;
+            const typeComfort = form.elements["TypeComfort"].value;
+            const typeSize = form.elements["TypeSize"].value;
+            EditRoom(hotelId, hotelRoomId, number, pricePerDay, typeComfort, typeSize);
+        });
+
+        let title = document.querySelector("a");
+        title.innerHTML = localStorage['hotelName'];
+        var hotelId = localStorage['hotelId'];
+
+        var myData = localStorage['hotelRoomId'];
+        localStorage.removeItem('hotelRoomId'); // Clear the localStorage
+        GetRoom(myData, hotelId);
+    </script>
+
+</body>
+</html>

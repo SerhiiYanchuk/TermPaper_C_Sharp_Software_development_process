@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet" href="../css/table.css" />
+</head>
+<body>
+    <header>
+        <a href="../ManagePage.html" class="logo"></a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Rooms</a>
+                    <ul class="submenu">
+                        <li><a href="./ShowRoomsPage.html">List of rooms</a></li>
+                        <li><a href="./AddRoom.html">Add room</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Clients</a>
+                    <ul class="submenu">
+                        <li><a href="../Clients/SearchFreeRooms.html">Make order</a></li>
+                        <li><a href="../Clients/SearchClientOrders.html">Look orders</a></li>
+                        <li><a href="../Clients/BookedOrders.html">View booked order</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <table class="table_dark">
+        <thead>
+            <tr>
+                <th>Number</th>
+                <th>PricePerDay</th>
+                <th>TypeComfort</th>
+                <th>TypeSize</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="myDiv"></div>
+
+    <script>
+
+        async function GetRoomsPage(pageIndex, hotelId) {
+            const response = await fetch("https://localhost:44364/api/rooms/page/" + pageIndex + "?hotelId=" + hotelId, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                const body = await response.json();
+                let rows = document.querySelector("tbody");
+                rows.innerHTML = "";
+                //let newRows = document.createElement('tbody');
+                //oldRows.parentNode.replaceChild(newRows, oldRows)
+
+                body.hotelRooms.forEach(room => {
+                    rows.append(row(room));
+                });
+
+                let div = document.querySelector(".myDiv");
+                div.innerHTML = "";
+                if (body.pageViewModel.hasPreviousPage) {
+                    const backLink = document.createElement("a");
+                    backLink.append("< ");
+                    backLink.setAttribute("style", "cursor:pointer");
+                    backLink.addEventListener("click", e => {
+
+                        e.preventDefault();
+                        GetRoomsPage(body.pageViewModel.pageIndex - 1, hotelId)
+                    });
+                    div.append(backLink);
+                }
+                if (body.pageViewModel.hasNextPage) {
+                    const nextLink = document.createElement("a");
+                    nextLink.append(" >");
+                    nextLink.setAttribute("style", "cursor:pointer");
+                    nextLink.addEventListener("click", e => {
+
+                        e.preventDefault();
+                        GetRoomsPage(body.pageViewModel.pageIndex + 1, hotelId)
+                    });
+                    div.append(nextLink);
+                }
+            }
+        }
+
+        async function DeleteRoom(id) {
+            const response = await fetch("https://localhost:44364/api/rooms/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                window.location.href = "./ShowRoomsPage.html";
+            }
+        }
+
+        function row(room) {
+
+            const tr = document.createElement("tr");  
+
+            const numberTd = document.createElement("td");
+            numberTd.append(room.number);
+            tr.append(numberTd);
+
+            const priceTd = document.createElement("td");
+            priceTd.append(room.pricePerDay);
+            tr.append(priceTd);
+
+            
+
+            const comfortTd = document.createElement("td");
+            switch (room.typeComfort) {
+                case 1:
+                    comfortTd.append("Standart");
+                    break;
+                case 2:
+                    comfortTd.append("Suite");
+                    break;
+                case 3:
+                    comfortTd.append("De_Luxe");
+                    break;
+                case 4:
+                    comfortTd.append("Duplex");
+                    break;
+                case 5:
+                    comfortTd.append("Family_Room");
+                    break;
+                case 6:
+                    comfortTd.append("Honeymoon_Room");
+                    break;
+            }
+            tr.append(comfortTd);
+
+            const sizeTd = document.createElement("td");
+            switch (room.typeSize) {
+                case 1:
+                    sizeTd.append("SGL");
+                    break;
+                case 2:
+                    sizeTd.append("DBL");
+                    break;
+                case 3:
+                    sizeTd.append("DBL_TWN");
+                    break;
+                case 4:
+                    sizeTd.append("TRPL");
+                    break;
+                case 5:
+                    sizeTd.append("DBL_EXB");
+                    break;
+                case 6:
+                    sizeTd.append("TRPL_EXB");
+                    break;
+            }
+            tr.append(sizeTd);
+
+            const linksTd = document.createElement("td");
+
+            const editLink = document.createElement("a");
+            //editLink.setAttribute("data-id", user.id);
+            editLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            editLink.append("Edit");
+            editLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                localStorage.setItem('hotelRoomId', room.hotelRoomId);
+                window.location.href = './EditRoom.html';
+            });
+            linksTd.append(editLink);
+
+            const removeLink = document.createElement("a");
+            //removeLink.setAttribute("data-id", user.id);
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("Delete");
+            removeLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                DeleteRoom(room.hotelRoomId);
+            });
+
+            linksTd.append(removeLink);
+            tr.appendChild(linksTd);
+
+            return tr;
+        }
+
+
+        let title = document.querySelector("a");
+        title.innerHTML = localStorage['hotelName'];
+        var myData = localStorage['hotelId'];
+        GetRoomsPage(1, myData);
+    </script>
+</body>
+</html>

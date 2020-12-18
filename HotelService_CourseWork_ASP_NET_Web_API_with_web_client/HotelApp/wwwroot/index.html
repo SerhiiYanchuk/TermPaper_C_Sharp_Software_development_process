@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/table.css" />
+    <link rel="stylesheet" href="css/fields.css" media="screen" type="text/css" />
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">Hotel Service</a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Hotels</a>
+                    <ul class="submenu">
+                        <li><a href="index.html">List of hotels</a></li>
+                        <li><a href="./AddHotel.html">Add hotel</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Client base</a>
+                    <ul class="submenu">
+                        <li><a href="./Clients/ClientBase.html">Show clients</a></li>
+                        <li><a href="./Clients/AddClient.html">Add client</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div style="margin: 10px auto; width: 315px">
+        <label>Keyword: </label>
+        <input name="keyword" id="keyword">
+        <!--<fieldset>
+            <form name="filterForm">
+                <label>Keyword: </label>
+                <input name="keyword" id="keyword">
+                <input type="submit" value="Filter">
+            </form>
+        </fieldset>-->
+    </div>
+
+    <table class="table_dark">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+    <script>
+
+        async function GetHotels(keyword) {
+            const response = await fetch("https://localhost:44364/api/hotels?keyword=" + keyword, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+      
+            if (response.ok === true) {
+                const body = await response.json();
+                let rows = document.querySelector("tbody");
+                rows.innerHTML = "";
+
+                body.forEach(hotel => {
+                    rows.append(row(hotel));
+                });
+
+            }
+            if (response.status == 500) {
+                window.location.href = "./error.html";
+            }
+        }
+
+        async function DeleteHotel(id) {
+            const response = await fetch("https://localhost:44364/api/hotels/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.ok === true) {
+                window.location.href = "./index.html";
+            }
+        }
+
+        function row(hotel) {
+
+            const tr = document.createElement("tr");
+
+            const nameTd = document.createElement("td");
+            nameTd.append(hotel.name);
+            tr.append(nameTd);
+
+            const addressTd = document.createElement("td");
+            addressTd.append(hotel.address);
+            tr.append(addressTd);
+
+
+            const linksTd = document.createElement("td");
+
+            const manageLink = document.createElement("a");
+            //editLink.setAttribute("data-id", user.id);
+            manageLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            manageLink.append("Manage");
+            manageLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                localStorage.setItem('hotelId', hotel.hotelId);
+                localStorage.setItem('hotelName', hotel.name);
+                window.location.href = './ManagePage.html';
+            });
+            linksTd.append(manageLink);
+
+            const removeLink = document.createElement("a");
+            //removeLink.setAttribute("data-id", user.id);
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("Delete");
+            removeLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                DeleteHotel(hotel.hotelId);
+            });
+
+            linksTd.append(removeLink);
+            tr.appendChild(linksTd);
+
+            return tr;
+        }
+
+        GetHotels("");
+        //document.forms["filterForm"].addEventListener("submit", e => {
+        //    e.preventDefault();
+        //    const form = document.forms["filterForm"];
+        //    const keyword = form.elements["keyword"].value;
+        //    GetHotels(keyword);
+        //});
+
+        document.querySelector("#keyword").onchange = function () {
+            
+            GetHotels(this.value);
+        };
+    </script>
+
+</body>
+</html>

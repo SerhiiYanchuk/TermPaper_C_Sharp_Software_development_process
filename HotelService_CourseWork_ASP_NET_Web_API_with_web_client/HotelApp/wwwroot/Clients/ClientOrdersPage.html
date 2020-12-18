@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet" href="../css/table.css" />
+</head>
+<body>
+    <header>
+        <a href="../index.html" class="logo">Hotel Service</a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Hotels</a>
+                    <ul class="submenu">
+                        <li><a href="../index.html">List of hotels</a></li>
+                        <li><a href="../AddHotel.html">Add hotel</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Client base</a>
+                    <ul class="submenu">
+                        <li><a href="./ClientBase.html">Show clients</a></li>
+                        <li><a href="./AddClient.html">Add client</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <table class="table_dark">
+        <thead>
+            <tr>
+                <th>Hotel</th>
+                <th>Number</th>
+                <th>PricePerDay</th>
+                <th>CheckInDate</th>
+                <th>CheckOutDate</th>
+                <th>PaymentState</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+
+        async function ConfirmPayment(activeOrderId) {
+            const response = await fetch("https://localhost:44364/api/orders/" + activeOrderId + "/paid", {
+                method: "PUT",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" }
+            });
+            if (response.status == 500) {
+                window.location.href = "../error.html";
+            }
+            if (response.ok === true) {
+                GetOrders(localStorage['clientId']);
+            }
+        }
+
+        async function DeleteOrder(id) {
+            const response = await fetch("https://localhost:44364/api/orders/" + id, {
+                method: "DELETE",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.status == 500) {
+                window.location.href = "../error.html";
+            }
+            if (response.ok === true) {
+                GetOrders(localStorage['clientId']);
+            }
+        }
+
+        async function GetOrders(clientId) {
+            const response = await fetch("https://localhost:44364/api/clients/" + clientId + "/orders", {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.status == 500) {
+                window.location.href = "../error.html";
+            }
+            if (response.ok === true) {
+                const body = await response.json();
+                let rows = document.querySelector("tbody");
+                rows.innerHTML = "";
+
+                body.forEach(order => {
+                    rows.append(row(order));
+                });
+
+            }
+        }
+
+        function row(order) {
+
+            const tr = document.createElement("tr");
+            //tr.setAttribute("data-rowid", user.id);
+
+            const hotelTd = document.createElement("td");
+            hotelTd.append(order.hotelRoom.hotel.name);
+            tr.append(hotelTd);
+
+            const numberTd = document.createElement("td");
+            numberTd.append(order.hotelRoom.number);
+            tr.append(numberTd);
+
+            const priceTd = document.createElement("td");
+            priceTd.append(order.hotelRoom.pricePerDay);
+            tr.append(priceTd);
+
+            const checkInDateTd = document.createElement("td");
+            let date = new Date(order.checkInDate);
+            checkInDateTd.append(date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
+            tr.append(checkInDateTd);
+
+            const checkOutDateTd = document.createElement("td");
+            date = new Date(order.checkOutDate);
+            checkOutDateTd.append(date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear());
+            tr.append(checkOutDateTd);
+
+            const paymentTd = document.createElement("td");
+            switch (order.paymentState) {
+                case 1:
+                    paymentTd.append("Paid");
+                    break;
+                case 2:
+                    paymentTd.append("Booked");
+                    break;
+            }
+            tr.append(paymentTd);
+
+            const linksTd = document.createElement("td");
+
+            if (order.paymentState == 2) {
+                
+
+                const payLink = document.createElement("a");
+                //editLink.setAttribute("data-id", user.id);
+                payLink.setAttribute("style", "cursor:pointer;padding:15px;");
+                payLink.append("Pay");
+                payLink.addEventListener("click", e => {
+
+                    e.preventDefault();
+                    ConfirmPayment(order.activeOrderId);
+                });
+                linksTd.append(payLink);
+
+                
+            }
+
+            const removeLink = document.createElement("a");
+            //removeLink.setAttribute("data-id", user.id);
+            removeLink.setAttribute("style", "cursor:pointer;padding:15px;");
+            removeLink.append("Cancel");
+            removeLink.addEventListener("click", e => {
+
+                e.preventDefault();
+                DeleteOrder(order.activeOrderId);
+            });
+
+            linksTd.append(removeLink);
+
+            tr.appendChild(linksTd);
+            return tr;
+        }
+
+        GetOrders(localStorage['clientId']);
+
+    </script>
+
+</body>
+</html>

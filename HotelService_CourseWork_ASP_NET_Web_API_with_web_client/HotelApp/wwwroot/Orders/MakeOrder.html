@@ -1,0 +1,349 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet" href="../css/fields.css" media="screen" type="text/css" />
+</head>
+<body>
+    <header>
+        <a href="../ManagePage.html" class="logo"></a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Rooms</a>
+                    <ul class="submenu">
+                        <li><a href="../Rooms/ShowRoomsPage.html">List of rooms</a></li>
+                        <li><a href="../Rooms/AddRoom.html">Add room</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Orders</a>
+                    <ul class="submenu">
+                        <li><a href="./SearchFreeRooms.html">Make order</a></li>
+                        <li><a href="./SearchOrdersPeriod.html">View orders for the period</a></li>
+                        <li><a href="./BookedOrders.html">View booked order</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="errors" class="myDiv" style="display:none; color: darkred"></div>
+
+    <div id="login-form">
+        <h1>New order</h1>
+        <fieldset>
+            <form name="orderForm">
+                <input type="text" name="PhoneNumber" required placeholder="PhoneNumber" pattern="^[0-9]+$">
+                <!--<input type="hidden" name="order.HotelRoomId" value="@Model.HotelRoomId">
+                <input type="hidden" name="order.CheckInDate" value="@Model.CheckInDate">-->
+                <!--<input type="text" name="FirstName" required placeholder="FirstName" pattern="^[a-zA-Z]+$">
+                <input type="text" name="LastName" required placeholder="LastName" pattern="^[a-zA-Z]+$">-->
+                <!--<input type="date" name="CheckOutDate" required placeholder="CheckOutDate">
+                <select data-val="true" data-val-required="The PaymentState field is required." id="PaymentState" name="PaymentState">
+                    <option value="1" selected>Pay</option>
+                    <option value="2">Book</option>
+                </select>-->
+                <input type="submit" value="Accept order">
+            </form>
+            <div class="validation" asp-validation-summary="All"></div>
+        </fieldset>
+    </div>
+
+    <script>
+        async function GetClient(phoneNumber) {
+            const response = await fetch("https://localhost:44364/api/clients/phone?phoneNumber=" + phoneNumber, {
+                method: "GET",
+                headers: { "Accept": "application/json" }
+            });
+            if (response.status == 500) {
+                window.location.href = "../error.html";
+            }
+
+            let field = document.querySelector("fieldset");
+            field.innerHTML = "";
+
+            const form = document.createElement("form");
+            form.setAttribute("name", "orderForm");
+
+            const inputCheckOutDate = document.createElement("input");
+            inputCheckOutDate.setAttribute("type", "date");
+            inputCheckOutDate.setAttribute("name", "CheckOutDate");
+            inputCheckOutDate.required = true;
+            if (myData.maxCheckOutDate != null)
+                inputCheckOutDate.value = myData.maxCheckOutDate.slice(0, 10);
+
+
+
+            const inputPayment = document.createElement("select");
+            inputPayment.setAttribute("name", "PaymentState");
+            var option1 = document.createElement("option");
+            option1.text = "Pay";
+            option1.value = 1;
+            option1.selected = true;
+            inputPayment.add(option1);
+            var option2 = document.createElement("option");
+            option2.text = "Book";
+            option2.value = 2;
+            inputPayment.add(option2);
+
+
+
+            const inputSubmit = document.createElement("input");
+            inputSubmit.setAttribute("type", "submit");
+            inputSubmit.value = "Accept order"
+
+
+            if (response.ok === false) {
+                const inputFirstName = document.createElement("input");
+                inputFirstName.setAttribute("type", "text");
+                inputFirstName.setAttribute("name", "FirstName");
+                inputFirstName.required = true;
+                inputFirstName.setAttribute("placeholder", "FirstName");
+                inputFirstName.setAttribute("pattern", "^[a-zA-Z]+$");
+
+                const inputLastName = document.createElement("input");
+                inputLastName.setAttribute("type", "text");
+                inputLastName.setAttribute("name", "LastName");
+                inputLastName.required = true;
+                inputLastName.setAttribute("placeholder", "LastName");
+                inputLastName.setAttribute("pattern", "^[a-zA-Z]+$");
+
+                form.append(inputFirstName);
+                form.append(inputLastName);
+
+                form.addEventListener("submit", e => {
+                    e.preventDefault();
+                    const form2 = document.forms["orderForm"];
+                    const firstName = form2.elements["FirstName"].value;
+                    const lastName = form2.elements["LastName"].value;
+                    const checkOutDate = form2.elements["CheckOutDate"].value;
+                    const paymentState = form2.elements["PaymentState"].value;
+                    AddClient(phoneNumber, firstName, lastName, checkOutDate, paymentState);
+                });
+            }
+            else {
+                const body = await response.json();
+                let clientId = body.clientId;
+
+                form.addEventListener("submit", e => {
+                    e.preventDefault();
+                    const form2 = document.forms["orderForm"];
+                    const checkOutDate = form2.elements["CheckOutDate"].value;
+                    let dateIn = new Date(myData.checkInDate);
+                    let dateOut = new Date(checkOutDate);
+                    dateOut.setMilliseconds(-2 * 60 * 60 * 1000);
+                    let maxOut = new Date(myData.maxCheckOutDate);
+                    if (dateOut <= dateIn) {
+                        const errorBlock = document.getElementById("errors")
+
+                        errorBlock.innerHTML = "";
+                        const p = document.createElement("p");
+                        p.append("Check-in date can't be more or equal than Check-out date");
+                        errorBlock.append(p);
+                        errorBlock.style.display = "block";
+                    }
+                    else if (myData.maxCheckOutDate != null && maxOut < dateOut) {
+                        const errorBlock = document.getElementById("errors")
+
+                        errorBlock.innerHTML = "";
+                        const p = document.createElement("p");
+                        p.append("Check-out date can't be more or equal than max check-out date");
+                        errorBlock.append(p);
+                        errorBlock.style.display = "block";
+                    }
+                    else {
+                        const paymentState = form2.elements["PaymentState"].value;
+                        AddOrder(clientId, checkOutDate, paymentState);
+                    }
+                });
+            }
+
+            form.append(inputCheckOutDate);
+            form.append(inputPayment);
+            form.append(inputSubmit);
+
+            field.append(form);
+        }
+        async function AddClient(phoneNumber, firstName, lastName, checkOutDate, paymentState) {
+
+            const response = await fetch("https://localhost:44364/api/clients", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+
+                    FirstName: firstName,
+                    LastName: lastName,
+                    PhoneNumber: phoneNumber
+
+                })
+            });
+            if (response.status == 500) {
+                window.location.href = "../error.html";
+            }
+            if (response.status == 400) {
+                const body = await response.json();
+                const errorBlock = document.getElementById("errors")
+
+                errorBlock.innerHTML = "";
+                if (body.errors) {
+                    if (body.errors.FirstName) {
+                        body.errors.FirstName.forEach(error => {
+                            const p = document.createElement("p");
+                            p.append(error);
+                            errorBlock.append(p);
+                        });
+                    }
+                    if (body.errors.LastName) {
+                        body.errors.LastName.forEach(error => {
+                            const p = document.createElement("p");
+                            p.append(error);
+                            errorBlock.append(p);
+                        });
+                    }
+                }
+
+                errorBlock.style.display = "block";
+            }
+            if (response.ok === true) {
+                const body = await response.json();
+                let clientId = body.clientId;
+
+                let field = document.querySelector("fieldset");
+                field.innerHTML = "";
+
+                const form = document.createElement("form");
+                form.setAttribute("name", "orderForm");
+
+                const inputCheckOutDate = document.createElement("input");
+                inputCheckOutDate.setAttribute("type", "date");
+                inputCheckOutDate.setAttribute("name", "CheckOutDate");
+                inputCheckOutDate.required = true;
+                if (myData.maxCheckOutDate != null)
+                    inputCheckOutDate.value = myData.maxCheckOutDate.slice(0, 10);
+
+
+                const inputPayment = document.createElement("select");
+                inputPayment.setAttribute("name", "PaymentState");
+                var option1 = document.createElement("option");
+                option1.text = "Pay";
+                option1.value = 1;
+                option1.selected = true;
+                inputPayment.add(option1);
+                var option2 = document.createElement("option");
+                option2.text = "Book";
+                option2.value = 2;
+                inputPayment.add(option2);
+
+                const inputSubmit = document.createElement("input");
+                inputSubmit.setAttribute("type", "submit");
+                inputSubmit.value = "Accept order"
+
+                form.addEventListener("submit", e => {
+                    e.preventDefault();
+                    const form2 = document.forms["orderForm"];
+                    const checkOutDate = form2.elements["CheckOutDate"].value;
+                    let dateIn = new Date(myData.checkInDate);
+                    let dateOut = new Date(checkOutDate);
+                    dateOut.setMilliseconds(-2 * 60 * 60 * 1000);
+                    let maxOut = new Date(myData.maxCheckOutDate);
+                    if (dateOut <= dateIn) {
+                        const errorBlock = document.getElementById("errors")
+
+                        errorBlock.innerHTML = "";
+                        const p = document.createElement("p");
+                        p.append("Check-in date can't be more or equal than Check-out date");
+                        errorBlock.append(p);
+                        errorBlock.style.display = "block";
+                    }
+                    else if (myData.maxCheckOutDate != null && maxOut < dateOut) {
+                        const errorBlock = document.getElementById("errors")
+
+                        errorBlock.innerHTML = "";
+                        const p = document.createElement("p");
+                        p.append("Check-out date can't be more or equal than max check-out date");
+                        errorBlock.append(p);
+                        errorBlock.style.display = "block";
+                    }
+                    else {
+                        const paymentState = form2.elements["PaymentState"].value;
+                        AddOrder(clientId, checkOutDate, paymentState);
+                    }                
+                });
+
+                form.append(inputCheckOutDate);
+                form.append(inputPayment);
+                form.append(inputSubmit);
+
+                field.append(form);                
+                
+            }
+        }
+        async function AddOrder(clientId, checkOutDate, paymentState) {
+
+            const response = await fetch("https://localhost:44364/api/orders", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+
+                    clientId: parseInt(clientId),
+                    HotelRoomId: parseInt(myData.hotelRoomId),
+                    CheckInDate: myData.checkInDate,
+                    CheckOutDate: checkOutDate,
+                    PaymentState: parseInt(paymentState)
+
+                })
+            });
+            if (response.status == 500) {
+                window.location.href = "../error.html";
+            }
+            if (response.ok === true) {
+                window.location.href = "../ManagePage.html"
+            }
+        }
+
+
+        document.forms["orderForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["orderForm"];
+
+            const phoneNumber = form.elements["PhoneNumber"].value;
+            GetClient(phoneNumber);
+        });
+
+        let title = document.querySelector("a");
+        title.innerHTML = localStorage['hotelName'];
+
+        let myData = JSON.parse(localStorage['orderDetail']);
+        localStorage.removeItem('orderDetail'); // Clear the localStorage
+
+
+                    //async function AddOrder(checkOutDate, paymentState) {
+
+                    //    const response = await fetch("https://localhost:44364/api/clients/orders", {
+                    //        method: "POST",
+                    //        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                    //        body: JSON.stringify({
+                    //            Client: {
+                    //                FirstName: firstName,
+                    //                LastName: lastName,
+                    //                PhoneNumber: phoneNumber
+                    //            },
+                    //            Order: {
+                    //                HotelRoomId: parseInt(myData.hotelRoomId),
+                    //                CheckInDate: myData.checkInDate,
+                    //                CheckOutDate: checkOutDate,
+                    //                PaymentState: parseInt(paymentState)
+                    //            }
+                    //        })
+                    //    });
+                    //    if (response.ok === true) {
+                    //        window.location.href = "../index.html"
+                    //    }
+                    //}
+    </script>
+
+</body>
+</html>

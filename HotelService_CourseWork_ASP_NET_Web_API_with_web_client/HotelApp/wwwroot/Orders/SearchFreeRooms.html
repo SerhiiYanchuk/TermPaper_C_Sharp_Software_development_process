@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="../css/site.css" />
+    <link rel="stylesheet" href="../css/fields.css" media="screen" type="text/css" />
+</head>
+<body>
+    <header>
+        <a href="../ManagePage.html" class="logo"></a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Rooms</a>
+                    <ul class="submenu">
+                        <li><a href="../Rooms/ShowRoomsPage.html">List of rooms</a></li>
+                        <li><a href="../Rooms/AddRoom.html">Add room</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Orders</a>
+                    <ul class="submenu">
+                        <li><a href="./SearchFreeRooms.html">Make order</a></li>
+                        <li><a href="./SearchOrdersPeriod.html">View orders for the period</a></li>
+                        <li><a href="./BookedOrders.html">View booked order</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="errors" class="myDiv" style="display:none; color: darkred"></div>
+
+    <div id="login-form">
+        <h1>Search free rooms</h1>
+        <fieldset>
+            <form name="roomForm">
+                <input type="hidden" name="HotelId">
+                <select data-val="true" data-val-required="The TypeComfort field is required." id="TypeComfort" name="TypeComfort">
+                    <option value="0" selected>Not important</option>
+                    <option value="1">Standart</option>
+                    <option value="2">Suite</option>
+                    <option value="3">De_Luxe</option>
+                    <option value="4">Duplex</option>
+                    <option value="5">Family_Room</option>
+                    <option value="6">Honeymoon_Room</option>
+                </select>
+                <select data-val="true" data-val-required="The TypeSize field is required." id="TypeSize" name="TypeSize">
+                    <option value="0" selected>Not important</option>
+                    <option value="1">SGL</option>
+                    <option value="2">DBL</option>
+                    <option value="3">DBL_TWN</option>
+                    <option value="4">TRPL</option>
+                    <option value="5">DBL_EXB</option>
+                    <option value="6">TRPL_EXB</option>
+                </select>
+                <input type="date" name="CheckInDate" required placeholder="CheckInDate">
+                <input type="date" name="CheckOutDate" placeholder="CheckOutDate">
+                <input type="submit" value="Search">
+
+            </form>
+        </fieldset>
+    </div>
+
+    <script>
+        async function SearchFreeRooms(hotelId, checkInDate, checkOutDate, typeComfort, typeSize) {
+
+            const response = await fetch("https://localhost:44364/api/rooms/free?" + "HotelId=" + hotelId + "&TypeComfort=" + typeComfort + "&TypeSize=" + typeSize + "&CheckInDate="
+                + checkInDate + "&CheckOutDate=" + checkOutDate, {
+                method: "GET",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" }
+            });
+            if (response.status == 500) {
+                window.location.href = "../error.html";
+            }
+            if (response.status == 400) {
+                const body = await response.json();
+                const errorBlock = document.getElementById("errors")
+
+                errorBlock.innerHTML = "";
+
+                if (body.CheckOutDate) {
+                    body.CheckOutDate.forEach(error => {
+                        const p = document.createElement("p");
+                        p.append(error);
+                        errorBlock.append(p);
+                    });
+                }
+                if (body.CheckInDate) {
+                    body.CheckInDate.forEach(error => {
+                        const p = document.createElement("p");
+                        p.append(error);
+                        errorBlock.append(p);
+                    });
+                }
+                errorBlock.style.display = "block";
+            }
+            if (response.ok === true) {
+                const body = await response.json();
+                localStorage.setItem('freeRooms', JSON.stringify(body));
+                window.location.href = "./FreeRoomsPage.html"
+            }
+        }
+
+        document.forms["roomForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["roomForm"];
+            const hotelId = form.elements["HotelId"].value;
+            const checkInDate = form.elements["CheckInDate"].value;
+            const checkOutDate = form.elements["CheckOutDate"].value;
+            const typeComfort = form.elements["TypeComfort"].value;
+            const typeSize = form.elements["TypeSize"].value;
+            SearchFreeRooms(hotelId, checkInDate, checkOutDate, typeComfort, typeSize);
+        });
+
+        let title = document.querySelector("a");
+        title.innerHTML = localStorage['hotelName'];
+
+        document.forms["roomForm"].elements["HotelId"].value = localStorage['hotelId'];
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hotel Service</title>
+    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="css/fields.css" media="screen" type="text/css" />
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">Hotel Service</a>
+        <nav>
+            <ul class="topmenu">
+                <li>
+                    <a href="" class="submenu-link">Hotels</a>
+                    <ul class="submenu">
+                        <li><a href="index.html">List of hotels</a></li>
+                        <li><a href="./AddHotel.html">Add hotel</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="" class="submenu-link">Client base</a>
+                    <ul class="submenu">
+                        <li><a href="./Clients/ClientBase.html">Show clients</a></li>
+                        <li><a href="./Clients/AddClient.html">Add client</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="errors" class="myDiv" style="display:none; color: darkred"></div>
+
+    <div id="login-form">
+        <h1>New hotel</h1>
+        <fieldset>
+            <form name="hotelForm">
+                <input type="text" name="name" required placeholder="Name" pattern="^[a-zA-Z0-9]+$">
+                <input type="text" name="address" required placeholder="Address" pattern="^[a-zA-Z0-9 ]+$">
+                <input type="submit" value="Add">
+            </form>
+        </fieldset>
+    </div>
+
+    <script>
+        async function AddHotel(name, address) {
+
+            const response = await fetch("https://localhost:44364/api/hotels", {
+                method: "POST",
+                headers: { "Accept": "application/json", "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    Name: name,
+                    Address: address
+                })
+            });
+            if (response.status == 500) {
+                window.location.href = "./error.html";
+            }
+            if (response.status == 400) {
+                const body = await response.json();
+                const errorBlock = document.getElementById("errors")
+
+                errorBlock.innerHTML = "";
+                if (body.errors) {
+                    if (body.errors.Name) {
+                        body.errors.Name.forEach(error => {
+                            const p = document.createElement("p");
+                            p.append(error);
+                            errorBlock.append(p);
+                        });
+                    }
+                    if (body.errors.Address) {
+                        body.errors.Address.forEach(error => {
+                            const p = document.createElement("p");
+                            p.append(error);
+                            errorBlock.append(p);
+                        });
+                    }
+                }
+
+                errorBlock.style.display = "block";
+            }
+            if (response.ok === true) {
+                window.location.href = "./index.html"
+            }
+        }
+
+        document.forms["hotelForm"].addEventListener("submit", e => {
+            e.preventDefault();
+            const form = document.forms["hotelForm"];
+            const name = form.elements["name"].value;
+            const address = form.elements["address"].value;
+            AddHotel(name, address);
+        });
+    </script>
+</body>
+</html>
